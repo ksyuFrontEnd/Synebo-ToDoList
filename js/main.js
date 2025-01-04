@@ -4,6 +4,7 @@ const todoList = document.querySelector('#todoList');
 const emptyList = document.querySelector('#emptyList');
 
 let tasks = [];
+checkEmptyList();
 
 // Add task
 form.addEventListener('submit', addTask);
@@ -42,10 +43,8 @@ function addTask(e) {
     taskInput.value = "";
     taskInput.focus();
 
-    // Delete emptyList item if there are tasks to do in the list
-    if (todoList.children.length > 1) {
-        emptyList.classList.add('none');
-    }
+    checkEmptyList();
+
 }
 
 // Delete task
@@ -69,11 +68,8 @@ function deleteTask(event) {
     })
 
     parentNode.remove();
-    
-    // Show emptyList item if there are no tasks in the list
-    if (todoList.children.length === 1) {
-        emptyList.classList.remove('none');
-    }
+
+    checkEmptyList();
 }
 
 // Mark task as complete
@@ -98,4 +94,19 @@ function doneTask(e) {
     const taskTitle = parentNode.querySelector('span');
 
     taskTitle.classList.toggle('task-title--done');
+}
+
+// Show or hide emptyList item
+function checkEmptyList() {
+    if (tasks.length === 0) {
+        const emptyListHTML = `
+                                <li id="emptyList" class="empty-list">
+                                    <div class="empty-list__title">There are no tasks for today yet...</div>
+                                </li>`;
+
+        todoList.insertAdjacentHTML('afterbegin', emptyListHTML);
+    } else {
+        const emptyListEl = document.querySelector('#emptyList');
+        emptyListEl ? emptyListEl.remove() : null;
+    }
 }
