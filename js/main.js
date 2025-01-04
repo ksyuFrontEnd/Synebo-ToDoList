@@ -3,6 +3,7 @@ const taskInput = document.querySelector('#taskInput');
 const todoList = document.querySelector('#todoList');
 const emptyList = document.querySelector('#emptyList');
 const filterButtons = document.querySelectorAll('.filter-btn');
+const clearCompletedBtn = document.querySelector('#clearCompleted');
 
 let tasks = [];
 
@@ -158,5 +159,21 @@ function filterTasks(event) {
     todoList.innerHTML = ""; 
     filteredTasks.forEach(renderTask);
 
+    checkEmptyList();
+}
+
+// Clear all completed tasks
+clearCompletedBtn.addEventListener('click', clearCompletedTasks);
+
+function clearCompletedTasks() {
+    
+    tasks = tasks.filter(task => !task.done);
+
+    saveToLocalStorage();
+
+    todoList.innerHTML = "";
+
+    tasks.forEach(renderTask);
+    
     checkEmptyList();
 }
