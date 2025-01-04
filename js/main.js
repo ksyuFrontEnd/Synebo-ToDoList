@@ -18,6 +18,10 @@ form.addEventListener('submit', function(e) {
                     </li>`
 
     todoList.insertAdjacentHTML('beforeend', taskHTML);
+
+    // Clear input after adding the task and return focus
+    taskInput.value = "";
+    taskInput.focus();
                     
 })
 
