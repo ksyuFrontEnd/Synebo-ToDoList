@@ -4,6 +4,7 @@ const todoList = document.querySelector('#todoList');
 const emptyList = document.querySelector('#emptyList');
 const filterButtons = document.querySelectorAll('.filter-btn');
 const clearCompletedBtn = document.querySelector('#clearCompleted');
+const itemsLeft = document.querySelector('#itemsLeft');
 
 let tasks = [];
 
@@ -16,6 +17,8 @@ if (localStorage.getItem('tasks')) {
 }
 
 checkEmptyList();
+
+updateItemsLeft();
 
 // Add task
 form.addEventListener('submit', addTask);
@@ -45,18 +48,19 @@ function addTask(e) {
     taskInput.focus();
 
     checkEmptyList();
+    updateItemsLeft();
 
 }
 
 // Delete task
 todoList.addEventListener('click', deleteTask);
 
-function deleteTask(event) {
+function deleteTask(e) {
 
     // Delete task from the list
-    if (event.target.dataset.action !== 'delete') return;
+    if (e.target.dataset.action !== 'delete') return;
 
-    const parentNode = event.target.closest('li'); 
+    const parentNode = e.target.closest('li'); 
 
     const id = Number(parentNode.id);
 
@@ -73,6 +77,7 @@ function deleteTask(event) {
     parentNode.remove();
 
     checkEmptyList();
+    updateItemsLeft();
 }
 
 // Mark task as complete
@@ -99,6 +104,8 @@ function doneTask(e) {
     const taskTitle = parentNode.querySelector('span');
 
     taskTitle.classList.toggle('task-title--done');
+
+    updateItemsLeft();
 }
 
 // Show or hide emptyList item
@@ -176,4 +183,11 @@ function clearCompletedTasks() {
     tasks.forEach(renderTask);
     
     checkEmptyList();
+    updateItemsLeft();
+}
+
+// Count incomplete tasks
+function updateItemsLeft() {
+    const activeTasksCount = tasks.filter(task => !task.done).length;
+    itemsLeft.textContent = `${activeTasksCount} items left`;
 }
