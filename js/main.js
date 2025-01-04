@@ -3,6 +3,8 @@ const taskInput = document.querySelector('#taskInput');
 const todoList = document.querySelector('#todoList');
 const emptyList = document.querySelector('#emptyList');
 
+let tasks = [];
+
 // Add task
 form.addEventListener('submit', addTask);
 
@@ -11,10 +13,23 @@ function addTask(e) {
     
     // Add new task to the list
     const taskText = taskInput.value;
+
+    // Create an object for a task
+    const newTask = {
+        id: Date.now(),
+        text: taskText,
+        done: false,
+    }
+
+    // Add task to array
+    tasks.push(newTask);
+    console.log(tasks);
+
+    const cssClass = newTask.done ? "task-title task-title--done" : "task-title";
     
     const taskHTML = `
-                    <li class="list-group-item">
-                        <span class="task-title">${taskText}</span>
+                    <li id="${newTask.id}" class="list-group-item">
+                        <span class="${cssClass}">${newTask.text}</span>
                         <div class="task-item__buttons">
                             <button type="button" data-action="done" class="btn-action">Done</button>
                             <button type="button" data-action="delete" class="btn-action">X</button>
@@ -42,6 +57,17 @@ function deleteTask(event) {
     if (event.target.dataset.action !== 'delete') return;
 
     const parentNode = event.target.closest('li'); 
+
+    const id = Number(parentNode.id);
+
+    tasks = tasks.filter(function (task) {
+        if (task.id === id) {
+            return false;
+        } else {
+            return true;
+        }
+    })
+
     parentNode.remove();
     
     // Show emptyList item if there are no tasks in the list
@@ -58,6 +84,18 @@ function doneTask(e) {
     if (e.target.dataset.action !== 'done') return;
 
     const parentNode = e.target.closest('li');
+
+    const id = Number(parentNode.id);
+
+    const task = tasks.find(function(task) {
+        if (task.id === id) {
+            return true;
+        }
+    })
+
+    task.done = !task.done;
+
     const taskTitle = parentNode.querySelector('span');
+
     taskTitle.classList.toggle('task-title--done');
 }
