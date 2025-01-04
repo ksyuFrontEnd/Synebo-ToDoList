@@ -4,6 +4,15 @@ const todoList = document.querySelector('#todoList');
 const emptyList = document.querySelector('#emptyList');
 
 let tasks = [];
+
+if (localStorage.getItem('tasks')) {
+    tasks = JSON.parse(localStorage.getItem('tasks'));
+
+    tasks.forEach(function(task) {
+        renderTask(task);
+    })
+}
+
 checkEmptyList();
 
 // Add task
@@ -24,20 +33,10 @@ function addTask(e) {
 
     // Add task to array
     tasks.push(newTask);
-    console.log(tasks);
 
-    const cssClass = newTask.done ? "task-title task-title--done" : "task-title";
-    
-    const taskHTML = `
-                    <li id="${newTask.id}" class="list-group-item">
-                        <span class="${cssClass}">${newTask.text}</span>
-                        <div class="task-item__buttons">
-                            <button type="button" data-action="done" class="btn-action">Done</button>
-                            <button type="button" data-action="delete" class="btn-action">X</button>
-                        </div>
-                    </li>`
+    saveToLocalStorage();
 
-    todoList.insertAdjacentHTML('beforeend', taskHTML);
+    renderTask(newTask);
 
     // Clear input after adding the task and return focus
     taskInput.value = "";
@@ -67,6 +66,8 @@ function deleteTask(event) {
         }
     })
 
+    saveToLocalStorage();
+
     parentNode.remove();
 
     checkEmptyList();
@@ -91,6 +92,8 @@ function doneTask(e) {
 
     task.done = !task.done;
 
+    saveToLocalStorage();
+
     const taskTitle = parentNode.querySelector('span');
 
     taskTitle.classList.toggle('task-title--done');
@@ -109,4 +112,24 @@ function checkEmptyList() {
         const emptyListEl = document.querySelector('#emptyList');
         emptyListEl ? emptyListEl.remove() : null;
     }
+}
+
+// Save data to localStorage
+function saveToLocalStorage() {
+    localStorage.setItem('tasks', JSON.stringify(tasks))
+}
+
+function renderTask(task) {
+    const cssClass = task.done ? "task-title task-title--done" : "task-title";
+    
+    const taskHTML = `
+                    <li id="${task.id}" class="list-group-item">
+                        <span class="${cssClass}">${task.text}</span>
+                        <div class="task-item__buttons">
+                            <button type="button" data-action="done" class="btn-action">Done</button>
+                            <button type="button" data-action="delete" class="btn-action">X</button>
+                        </div>
+                    </li>`
+
+    todoList.insertAdjacentHTML('beforeend', taskHTML);
 }
