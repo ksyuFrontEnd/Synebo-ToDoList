@@ -51,4 +51,14 @@ function deleteTask(event) {
     
 }
 
+// Mark task as complete
+todoList.addEventListener('click', doneTask);
 
+function doneTask(e){
+
+    if (e.target.dataset.action === 'done') {
+        const parentNode = e.target.closest('li');
+        const taskTitle = parentNode.querySelector('span');
+        taskTitle.classList.toggle('task-title--done');
+    }
+}

@@ -1,3 +1,8 @@
 .none {
     display: none !important;
 }
+
+.task-title--done {
+    text-decoration: line-through;
+    color: gray;
+}
