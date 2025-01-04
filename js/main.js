@@ -3,7 +3,9 @@ const taskInput = document.querySelector('#taskInput');
 const todoList = document.querySelector('#todoList');
 const emptyList = document.querySelector('#emptyList');
 
-form.addEventListener('submit', function(e) {
+form.addEventListener('submit', addTask);
+
+function addTask(e) {
     e.preventDefault();
     
     // Add new task to the list
@@ -26,8 +28,8 @@ form.addEventListener('submit', function(e) {
 
     // Delete emptyList item if there are tasks to do in the list
     if(todoList.children.length > 1) {
-        emptyList.classList.add('none')
+        emptyList.classList.add('none');
     }
-                    
-})
+}
+
 
