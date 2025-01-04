@@ -28,7 +28,7 @@ function addTask(e) {
     taskInput.focus();
 
     // Delete emptyList item if there are tasks to do in the list
-    if(todoList.children.length > 1) {
+    if (todoList.children.length > 1) {
         emptyList.classList.add('none');
     }
 }
@@ -39,26 +39,25 @@ todoList.addEventListener('click', deleteTask);
 function deleteTask(event) {
 
     // Delete task from the list
-    if (event.target.dataset.action === 'delete') {
-        const parentNode = event.target.closest('li'); 
-        parentNode.remove();
-    }
+    if (event.target.dataset.action !== 'delete') return;
 
+    const parentNode = event.target.closest('li'); 
+    parentNode.remove();
+    
     // Show emptyList item if there are no tasks in the list
     if (todoList.children.length === 1) {
         emptyList.classList.remove('none');
     }
-    
 }
 
 // Mark task as complete
 todoList.addEventListener('click', doneTask);
 
-function doneTask(e){
+function doneTask(e) {
 
-    if (e.target.dataset.action === 'done') {
-        const parentNode = e.target.closest('li');
-        const taskTitle = parentNode.querySelector('span');
-        taskTitle.classList.toggle('task-title--done');
-    }
+    if (e.target.dataset.action !== 'done') return;
+
+    const parentNode = e.target.closest('li');
+    const taskTitle = parentNode.querySelector('span');
+    taskTitle.classList.toggle('task-title--done');
 }
