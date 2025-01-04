@@ -2,6 +2,7 @@ const form = document.querySelector('#form');
 const taskInput = document.querySelector('#taskInput');
 const todoList = document.querySelector('#todoList');
 const emptyList = document.querySelector('#emptyList');
+const filterButtons = document.querySelectorAll('.filter-btn');
 
 let tasks = [];
 
@@ -132,4 +133,30 @@ function renderTask(task) {
                     </li>`
 
     todoList.insertAdjacentHTML('beforeend', taskHTML);
+}
+
+// Filter tasks
+filterButtons.forEach(button => {
+    button.addEventListener('click', filterTasks);
+});
+
+function filterTasks(event) {
+    const filter = event.target.id; 
+    filterButtons.forEach(btn => btn.classList.remove('active'));
+    event.target.classList.add('active');
+
+    let filteredTasks = [];
+
+    if (filter === 'filterAll') {
+        filteredTasks = tasks;
+    } else if (filter === 'filterActive') {
+        filteredTasks = tasks.filter(task => !task.done);
+    } else if (filter === 'filterCompleted') {
+        filteredTasks = tasks.filter(task => task.done);
+    }
+
+    todoList.innerHTML = ""; 
+    filteredTasks.forEach(renderTask);
+
+    checkEmptyList();
 }
