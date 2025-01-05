@@ -127,7 +127,9 @@ function renderTask(task) {
                         <button type="button" data-action="done" class="btn-action btn-action__done ${doneClass}">
                         </button>
                         <span class="${cssClass}">${task.text}</span>
-                        <button type="button" data-action="delete" class="btn-action">X</button>    
+                        <button type="button" data-action="delete" class="btn-action btn-action__delete">
+                            <svg viewBox="0 0 24 24" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24"><path d="M5.3 18.7c.2.2.4.3.7.3s.5-.1.7-.3l5.3-5.3 5.3 5.3c.2.2.5.3.7.3s.5-.1.7-.3c.4-.4.4-1 0-1.4L13.4 12l5.3-5.3c.4-.4.4-1 0-1.4s-1-.4-1.4 0L12 10.6 6.7 5.3c-.4-.4-1-.4-1.4 0s-.4 1 0 1.4l5.3 5.3-5.3 5.3c-.4.4-.4 1 0 1.4z" id="_icons" fill="#353535" class="fill-000000"></path></svg>
+                        </button>    
                     </li>`
 
     todoList.insertAdjacentHTML('beforeend', taskHTML);
