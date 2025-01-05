@@ -17,7 +17,6 @@ if (localStorage.getItem('tasks')) {
 }
 
 checkEmptyList();
-
 updateItemsLeft();
 
 // Add task
@@ -40,7 +39,6 @@ function addTask(e) {
     tasks.push(newTask);
 
     saveToLocalStorage();
-
     renderTask(newTask);
 
     // Clear input after adding the task and return focus
@@ -61,7 +59,6 @@ function deleteTask(e) {
     if (e.target.dataset.action !== 'delete') return;
 
     const parentNode = e.target.closest('li'); 
-
     const id = Number(parentNode.id);
 
     tasks = tasks.filter(function (task) {
@@ -73,9 +70,7 @@ function deleteTask(e) {
     })
 
     saveToLocalStorage();
-
     parentNode.remove();
-
     checkEmptyList();
     updateItemsLeft();
 }
@@ -86,25 +81,20 @@ todoList.addEventListener('click', doneTask);
 function doneTask(e) {
 
     if (e.target.dataset.action !== 'done') return;
-
     const parentNode = e.target.closest('li');
-
     const id = Number(parentNode.id);
-
     const task = tasks.find(function(task) {
         if (task.id === id) {
             return true;
         }
-    })
+    });
 
     task.done = !task.done;
-
     saveToLocalStorage();
 
     const taskTitle = parentNode.querySelector('span');
-
     taskTitle.classList.toggle('task-title--done');
-
+    e.target.classList.toggle('done');
     updateItemsLeft();
 }
 
@@ -130,18 +120,19 @@ function saveToLocalStorage() {
 
 function renderTask(task) {
     const cssClass = task.done ? "task-title task-title--done" : "task-title";
+    const doneClass = task.done ? "done" : ""; 
     
     const taskHTML = `
                     <li id="${task.id}" class="list-group-item">
+                        <button type="button" data-action="done" class="btn-action btn-action__done ${doneClass}">
+                        </button>
                         <span class="${cssClass}">${task.text}</span>
-                        <div class="task-item__buttons">
-                            <button type="button" data-action="done" class="btn-action">Done</button>
-                            <button type="button" data-action="delete" class="btn-action">X</button>
-                        </div>
+                        <button type="button" data-action="delete" class="btn-action">X</button>    
                     </li>`
 
     todoList.insertAdjacentHTML('beforeend', taskHTML);
 }
+
 
 // Filter tasks
 filterButtons.forEach(button => {
@@ -165,7 +156,6 @@ function filterTasks(event) {
 
     todoList.innerHTML = ""; 
     filteredTasks.forEach(renderTask);
-
     checkEmptyList();
 }
 
@@ -175,13 +165,9 @@ clearCompletedBtn.addEventListener('click', clearCompletedTasks);
 function clearCompletedTasks() {
     
     tasks = tasks.filter(task => !task.done);
-
     saveToLocalStorage();
-
     todoList.innerHTML = "";
-
     tasks.forEach(renderTask);
-    
     checkEmptyList();
     updateItemsLeft();
 }
@@ -190,4 +176,10 @@ function clearCompletedTasks() {
 function updateItemsLeft() {
     const activeTasksCount = tasks.filter(task => !task.done).length;
     itemsLeft.textContent = `${activeTasksCount} items left`;
+}
+
+// Style button when task is done
+function markTaskAsDone(taskElement) {
+    const button = taskElement.querySelector('[data-action="done"]');
+    button.classList.toggle('done');
 }
